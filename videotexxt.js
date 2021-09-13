@@ -1,6 +1,6 @@
 
 var interval, video = document.getElementsByTagName("video")[0],  
-stage = document.getElementById("stage"),  
+stage = document.getElementById("stage"),  /** lấy id của phần sẽ chứa video chuyển dạng text */
 canvas = document.createElement("canvas"),  
 captureImage = function () {  
     var ctx;  
@@ -23,6 +23,7 @@ endCapture = function () {
         clearInterval(interval);  
     }  
 },  
+   /** khi bắt đầu convert video */
 play = function () {  
     var file = document.getElementById('file').files[0];  
     var url = URL.createObjectURL(file);  
@@ -39,6 +40,7 @@ play = function () {
     video.src = url;  
     video.play();  
 };  
+// bắt trạng thái của video convert theo trạng thái của video đang xem
 video.addEventListener("play", beginCapture);  
 video.addEventListener("pause", endCapture);  
 video.addEventListener("ended", endCapture);  
@@ -68,16 +70,16 @@ function toChars(context, width, height, rowChars) {
                 for (var col = 0; col < h; col++) {  
                     var cx = x + col,  
                         cy = y + row,  
-                        index = (cy * imageData.width + cx ) * 4,  
+                        index = (cy * imageData.width + cx ) * 4,   /**đây là đoạn tính tổng số pixel của video */
                         data = imageData.data,  
                         R = data[index],  
                         G = data[index + 1],  
                         B = data[index + 2],  
-                        gray = ~~(R * 0.4 + G* 0.49 + B* 0.11);  
+                        gray = ~~(R * 0.4 + G* 0.49 + B* 0.11);  /** đây là đoạn quy định màu của 1 điểm ảnh */
                     sumGray += gray;  
                 }  
             }  
-            pixels = (w * h) *2 ;  
+            pixels = (w * h) *2 ;   /**độ lớn của màn hình (ở đây có khoảng 10 kí tự điểm ảnh) nhân với 2 lần */
             return ~~(sumGray / pixels);  
         };  
     for (var r = 0; r < rows; r++) {  
@@ -95,7 +97,7 @@ function toChars(context, width, height, rowChars) {
 }  
 function getCharsMap() {  
     var chars = ['@', '#','$','!', '~', '`',  ];
-    // var chars = ['@','$','#','w','i','#', 'i', '-','-','`' ,'`' ]  
+    // var chars = ['@','$','#','w','i','#', 'i', '-','-','`' ,'`' ]  /** đây là kí tự của màn hình bình thường */
     var step = 25,  
         map = {};  
     for (var i = 0; i < 256; i++) {  
